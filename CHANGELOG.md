@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - VSCode setting file
+- `Debug` & `defmt::Format` impls for some structures and enums [#385]
+
+[#385]: https://github.com/stm32-rs/stm32f4xx-hal/pull/385
 
 ### Changed
 
@@ -46,6 +49,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [#372]: https://github.com/stm32-rs/stm32f4xx-hal/pull/372
 [#373]: https://github.com/stm32-rs/stm32f4xx-hal/pull/373
 [#396]: https://github.com/stm32-rs/stm32f4xx-hal/pull/396
+[#382]: https://github.com/stm32-rs/stm32f4xx-hal/pull/382
+[#380]: https://github.com/stm32-rs/stm32f4xx-hal/pull/380
 [#374]: https://github.com/stm32-rs/stm32f4xx-hal/pull/374
 [#380]: https://github.com/stm32-rs/stm32f4xx-hal/pull/380
 [#381]: https://github.com/stm32-rs/stm32f4xx-hal/pull/381
