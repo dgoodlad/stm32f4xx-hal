@@ -1059,6 +1059,11 @@ where
         }
     }
 
+    /// Access the owned peripheral for reading
+    pub fn peripheral(&self) -> &PERIPHERAL {
+        &self.peripheral
+    }
+
     /// Changes the buffer and restarts or continues a double buffer transfer. This must be called
     /// immediately after a transfer complete event if using double buffering, otherwise you might
     /// lose data. Returns the old buffer together with its `CurrentBuffer`. If an error occurs,

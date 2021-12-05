@@ -960,6 +960,20 @@ macro_rules! adc {
                     ((u32::from(sample) * self.calibrated_vdda) / self.max_sample) as u16
                 }
 
+                /// Make a converter for samples to millivolts
+                pub fn make_sample_to_millivolts(&self) -> impl Fn(u16)->u16 {
+                    let calibrated_vdda= self.calibrated_vdda;
+                    let max_sample=self.max_sample;
+                    move |sample| {
+                     ((u32::from(sample) * calibrated_vdda) / max_sample) as u16
+                    }
+                }
+
+                /// Returns the VDDA in millivolts calculated from the factory calibration and vrefint. Can be used to get calibration data from ADC1 and use it to configure ADCs that don't support calibration.
+                pub fn reference_voltage(&self) -> u32 {
+                    self.calibrated_vdda
+                }
+
                 /// Block until the conversion is completed
                 /// # Panics
                 /// Will panic if there is no conversion started and the end-of-conversion bit is not set
