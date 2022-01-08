@@ -8,7 +8,7 @@
     Temperature in °C = (110-30) * (adc_sample - VtempCal30::get().read()) / (VtempCal110::get().read()-VtempCal30::get().read()) + 30
 */
 
-use crate::dma::traits::PeriAddress;
+use crate::dma::traits::{PeriAddress, SafePeripheralRead};
 use crate::rcc::{Enable, Reset};
 use crate::{gpio::*, pac, signature::VrefCal, signature::VDDA_CALIB};
 use core::fmt;
@@ -690,6 +690,8 @@ macro_rules! adc {
 
     ($($adc_type:ident => ($constructor_fn_name:ident, $common_type:ident, $en_bit: expr)),+ $(,)*) => {
         $(
+            impl SafePeripheralRead for Adc<pac::$adc_type> { }
+
             impl Adc<pac::$adc_type> {
 
                 adc!(additionals: $adc_type => ($common_type));

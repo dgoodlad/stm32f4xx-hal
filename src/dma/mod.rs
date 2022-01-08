@@ -23,7 +23,7 @@ use crate::{pac, rcc};
 pub mod traits;
 use traits::{
     sealed::{Bits, Sealed},
-    Channel, DMASet, Direction, Instance, PeriAddress, Stream, StreamISR,
+    Channel, DMASet, Direction, Instance, PeriAddress, SafePeripheralRead, Stream, StreamISR,
 };
 
 /// Errors.
@@ -1019,6 +1019,20 @@ impl<STREAM, PERIPHERAL, BUF, const CHANNEL: u8>
 where
     STREAM: Stream,
     ChannelX<CHANNEL>: Channel,
+    PERIPHERAL: PeriAddress + DMASet<STREAM, PeripheralToMemory, CHANNEL> + SafePeripheralRead,
+    BUF: StaticWriteBuffer<Word = <PERIPHERAL as PeriAddress>::MemSize>,
+{
+    /// Access the owned peripheral for reading
+    pub fn peripheral(&self) -> &PERIPHERAL {
+        &self.peripheral
+    }
+}
+
+impl<STREAM, PERIPHERAL, BUF, const CHANNEL: u8>
+    Transfer<STREAM, PERIPHERAL, PeripheralToMemory, BUF, CHANNEL>
+where
+    STREAM: Stream,
+    ChannelX<CHANNEL>: Channel,
     PERIPHERAL: PeriAddress + DMASet<STREAM, PeripheralToMemory, CHANNEL>,
     BUF: StaticWriteBuffer<Word = <PERIPHERAL as PeriAddress>::MemSize>,
 {
@@ -1057,11 +1071,6 @@ where
             double_buf,
             transfer_length: n_transfers,
         }
-    }
-
-    /// Access the owned peripheral for reading
-    pub fn peripheral(&self) -> &PERIPHERAL {
-        &self.peripheral
     }
 
     /// Changes the buffer and restarts or continues a double buffer transfer. This must be called

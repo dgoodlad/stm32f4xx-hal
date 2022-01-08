@@ -16,6 +16,9 @@ pub(crate) mod sealed {
 }
 use sealed::{Bits, Sealed};
 
+/// Marker trait for structs which can be safelly accessed with shared reference
+pub trait SafePeripheralRead {}
+
 /// Trait for DMA stream interrupt handling.
 pub trait StreamISR: Sealed {
     /// Clear all interrupts for the DMA stream.
