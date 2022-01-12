@@ -335,3 +335,8 @@ bus! {
     TIM13 => (APB1, 7),
     TIM14 => (APB1, 8),
 }
+
+bus! {
+    SAI1 => (APB2, 22),
+    SAI2 => (APB2, 23),
+}
