@@ -1,3 +1,9 @@
+use embedded_hal_one::i2c::ErrorType;
+
+impl<I2C, PINS> ErrorType for super::FMPI2c<I2C, PINS> {
+    type Error = super::Error;
+}
+
 mod blocking {
     use super::super::{fmpi2c1, Error, FMPI2c};
     use core::ops::Deref;
@@ -7,8 +13,6 @@ mod blocking {
     where
         I2C: Deref<Target = fmpi2c1::RegisterBlock>,
     {
-        type Error = Error;
-
         fn write_read(&mut self, addr: u8, bytes: &[u8], buffer: &mut [u8]) -> Result<(), Error> {
             // Set up current slave address for writing and disable autoending
             self.i2c.cr2.modify(|_, w| {
@@ -79,8 +83,6 @@ mod blocking {
     where
         I2C: Deref<Target = fmpi2c1::RegisterBlock>,
     {
-        type Error = Error;
-
         fn read(&mut self, addr: u8, buffer: &mut [u8]) -> Result<(), Error> {
             // Set up current address for reading
             self.i2c.cr2.modify(|_, w| {
@@ -115,8 +117,6 @@ mod blocking {
     where
         I2C: Deref<Target = fmpi2c1::RegisterBlock>,
     {
-        type Error = Error;
-
         fn write(&mut self, addr: u8, bytes: &[u8]) -> Result<(), Error> {
             // Set up current slave address for writing and enable autoending
             self.i2c.cr2.modify(|_, w| {

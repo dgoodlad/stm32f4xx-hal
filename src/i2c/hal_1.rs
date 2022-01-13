@@ -1,4 +1,4 @@
-use embedded_hal_one::i2c::{Error, ErrorKind, NoAcknowledgeSource};
+use embedded_hal_one::i2c::{Error, ErrorKind, ErrorType, NoAcknowledgeSource};
 
 impl Error for super::Error {
     fn kind(&self) -> ErrorKind {
@@ -14,6 +14,10 @@ impl Error for super::Error {
     }
 }
 
+impl<I2C: super::Instance, PINS> ErrorType for super::I2c<I2C, PINS> {
+    type Error = super::Error;
+}
+
 mod blocking {
     use super::super::{Error, I2c, I2cCommon, Instance};
     use embedded_hal_one::i2c::blocking::{Read, Write, WriteIter, WriteIterRead, WriteRead};
@@ -22,8 +26,6 @@ mod blocking {
     where
         I2C: Instance,
     {
-        type Error = Error;
-
         fn write_read(
             &mut self,
             addr: u8,
@@ -41,8 +43,6 @@ mod blocking {
     where
         I2C: Instance,
     {
-        type Error = Error;
-
         fn write_iter_read<B>(
             &mut self,
             addr: u8,
@@ -63,8 +63,6 @@ mod blocking {
     where
         I2C: Instance,
     {
-        type Error = Error;
-
         fn write(&mut self, addr: u8, bytes: &[u8]) -> Result<(), Self::Error> {
             self.write_bytes(addr, bytes.iter().cloned())?;
 
@@ -83,8 +81,6 @@ mod blocking {
     where
         I2C: Instance,
     {
-        type Error = Error;
-
         fn write_iter<B>(&mut self, addr: u8, bytes: B) -> Result<(), Self::Error>
         where
             B: IntoIterator<Item = u8>,
@@ -106,8 +102,6 @@ mod blocking {
     where
         I2C: Instance,
     {
-        type Error = Error;
-
         fn read(&mut self, addr: u8, buffer: &mut [u8]) -> Result<(), Self::Error> {
             if let Some((last, buffer)) = buffer.split_last_mut() {
                 // Send a START condition and set ACK bit
